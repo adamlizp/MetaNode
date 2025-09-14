@@ -1,0 +1,37 @@
+{
+    "name": "金龙 #1",
+    "description": "一只超级帅的金龙",
+    "image": "https://gateway.pinata.cloud/ipfs/bafybeidbnwrgrir54zuvoo4assflbty3rggabb2tv4ou3nmqp4j33gskgy",
+    "attributes": [
+        {
+            "trait_type": "品种",
+            "value": "龙"
+        },
+        {
+            "trait_type": "眼睛颜色",
+            "value": "金色"
+        },
+        {
+            "trait_type": "表情",
+            "value": "微笑"
+        },
+        {
+            "trait_type": "稀有度",
+            "value": "传奇"
+        },
+        {
+            "trait_type": "创作者",
+            "value": "我自己"
+        },
+        {
+            "display_type": "number",
+            "trait_type": "版本",
+            "value": 1
+        },
+        {
+            "display_type": "date",
+            "trait_type": "创作日期",
+            "value": 1703808000
+        }
+    ]
+}
