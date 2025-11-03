@@ -166,62 +166,62 @@ function setUnstakePaused(bool _paused)  // 暂停/恢复解质押
 function setClaimPaused(bool _paused)  // 暂停/恢复领取奖励
 ```
 
-## 🧪 Testing
+## 🧪 测试
 
-The test suite includes:
+测试套件包括：
 
-- **StakePool.test.js**: Comprehensive functionality tests
-- **Security.test.js**: Security and edge case tests
+- **StakePool.test.js**: 综合功能测试
+- **Security.test.js**: 安全性和边界情况测试
 
-Test coverage includes:
-- Pool management
-- Staking/unstaking for both ETH and ERC20
-- Reward calculations and distribution
-- Lock period mechanics
-- Pause functionality
-- Access control
-- Edge cases and security scenarios
+测试覆盖范围：
+- 池管理功能
+- ETH 和 ERC20 的质押/解质押
+- 奖励计算和分配
+- 锁定期机制
+- 暂停功能
+- 访问控制
+- 边界情况和安全场景
 
-## 🔄 Upgrades
+## 🔄 合约升级
 
-The system uses OpenZeppelin's upgradeable proxy pattern:
+系统使用 OpenZeppelin 的可升级代理模式：
 
 ```bash
-# Set STAKE_POOL_PROXY_ADDRESS in .env
+# 在 .env 中设置 STAKE_POOL_PROXY_ADDRESS
 npm run upgrade:sepolia
 ```
 
-## 📋 Default Pool Configuration
+## 📋 默认池配置
 
-After deployment, two pools are automatically created:
+部署后，会自动创建两个池：
 
-**Pool 0 (ETH Staking)**
-- Token: Native ETH
-- Weight: 100
-- Min Deposit: 0.01 ETH
-- Lock Period: ~24 hours (6500 blocks)
+**池 0 (ETH 质押)**
+- 代币: 原生 ETH
+- 权重: 100
+- 最小质押: 0.01 ETH
+- 锁定期: ~24 小时 (6500 区块)
 
-**Pool 1 (TestToken Staking)**
-- Token: TestToken (TST)
-- Weight: 200  
-- Min Deposit: 100 TST
-- Lock Period: ~48 hours (13000 blocks)
+**池 1 (TestToken 质押)**
+- 代币: TestToken (TST)
+- 权重: 200
+- 最小质押: 100 TST
+- 锁定期: ~48 小时 (13000 区块)
 
-## 🛡️ Security Features
+## 🛡️ 安全特性
 
-- Reentrancy protection
-- Integer overflow/underflow protection (Solidity 0.8+)
-- Role-based access control
-- Emergency pause mechanisms
-- Comprehensive input validation
-- Safe math operations using OpenZeppelin
+- 重入攻击防护
+- 整数溢出/下溢防护 (Solidity 0.8+)
+- 基于角色的访问控制
+- 紧急暂停机制
+- 全面的输入验证
+- 使用 OpenZeppelin 的安全数学运算
 
-## 🔍 Contract Verification
+## 🔍 合约验证
 
-After deployment, verify contracts on Etherscan:
+部署后，在 Etherscan 上验证合约：
 
 ```bash
-npx hardhat verify --network sepolia CONTRACT_ADDRESS [CONSTRUCTOR_ARGS]
+npx hardhat verify --network sepolia 合约地址 [构造函数参数]
 ```
 
 ## 📁 Project Structure
@@ -246,26 +246,25 @@ stake/
 └── README.md
 ```
 
-## 🤝 Contributing
+## 🤝 贡献
 
-1. Fork the repository
-2. Create your feature branch
-3. Write tests for new functionality
-4. Run the test suite
-5. Submit a pull request
+1. Fork 本仓库
+2. 创建你的功能分支
+3. 为新功能编写测试
+4. 运行测试套件
+5. 提交 Pull Request
 
-## ⚠️ Important Notes
+## ⚠️ 重要提示
 
-1. **Testing First**: Always test on Sepolia before mainnet deployment
-2. **Private Keys**: Never commit private keys or sensitive data
-3. **Gas Estimation**: Test gas costs with large datasets
-4. **Upgrade Safety**: Test upgrades thoroughly on testnet
-5. **Admin Keys**: Use multi-sig wallets for admin functions in production
+1. **先测试**: 始终在 Sepolia 测试网测试后再部署到主网
+2. **私钥安全**: 永远不要提交私钥或敏感数据
+3. **Gas 估算**: 使用大数据集测试 Gas 成本
+4. **升级安全**: 在测试网上彻底测试升级
+5. **管理员密钥**: 生产环境中使用多签钱包管理管理员功能
 
-## 📄 License
+## 📄 许可证
 
-MIT License - see LICENSE file for details
+MIT License - 详见 LICENSE 文件
 
 ---
 
-Built with ❤️ by MetaNode Academy
