@@ -1,169 +1,169 @@
-# MetaNode Stake System
+# MetaNode 质押系统
 
-A comprehensive blockchain-based staking system that supports multiple token staking with MetaNode token rewards. The system provides multiple staking pools with independent configuration for stake tokens, reward calculations, and lock periods.
+一个功能完善的区块链质押系统，支持多种代币质押并获得 MetaNode 代币奖励。系统提供多个独立的质押池，每个池可以独立配置质押代币、奖励计算和锁定期等参数。
 
-## 🌟 Features
+## 🌟 核心特性
 
-- **Multi-Pool Support**: Create multiple staking pools for different tokens
-- **Native Currency Staking**: Support for ETH staking in the first pool
-- **ERC20 Token Staking**: Support for any ERC20 token staking
-- **Flexible Reward System**: MetaNode token rewards based on stake amount and time
-- **Lock Period Management**: Configurable unstaking lock periods per pool
-- **Upgradeable Architecture**: Using OpenZeppelin's proxy pattern
-- **Pause Controls**: Independent pause controls for different operations
-- **Access Control**: Role-based access control for admin functions
-- **Emergency Functions**: Emergency withdrawal and token recovery
+- **多池支持**: 为不同代币创建多个独立的质押池
+- **原生币质押**: 支持 ETH 等原生币质押
+- **ERC20代币质押**: 支持任何 ERC20 代币质押
+- **灵活的奖励系统**: 基于质押数量和时间计算 MetaNode 代币奖励
+- **锁定期管理**: 每个池可配置独立的解质押锁定期
+- **可升级架构**: 使用 OpenZeppelin 的代理升级模式
+- **暂停控制**: 独立控制不同操作的暂停状态
+- **权限控制**: 基于角色的访问控制管理
+- **紧急功能**: 紧急提现和代币恢复功能
 
-## 📋 System Requirements
+## 📋 系统要求
 
 - Node.js v16+ 
 - Hardhat
 - OpenZeppelin Contracts v5.0+
 - Ethers.js v6+
 
-## 🚀 Quick Start
+## 🚀 快速开始
 
-### 1. Installation
+### 1. 安装依赖
 
 ```bash
 cd stake
 npm install
 ```
 
-### 2. Environment Setup
+### 2. 环境配置
 
 ```bash
 cp .env.example .env
-# Edit .env with your configuration
+# 编辑 .env 文件配置你的参数
 ```
 
-Required environment variables:
-- `SEPOLIA_RPC_URL`: Sepolia network RPC URL
-- `PRIVATE_KEY`: Your wallet private key (without 0x prefix)
-- `ETHERSCAN_API_KEY`: For contract verification
+必需的环境变量：
+- `SEPOLIA_RPC_URL`: Sepolia 测试网 RPC URL
+- `PRIVATE_KEY`: 你的钱包私钥（不需要 0x 前缀）
+- `ETHERSCAN_API_KEY`: 用于合约验证的 API Key
 
-### 3. Compile Contracts
+### 3. 编译合约
 
 ```bash
 npm run compile
 ```
 
-### 4. Run Tests
+### 4. 运行测试
 
 ```bash
-# Run all tests
+# 运行所有测试
 npm run test
 
-# Run tests with gas reporting
+# 运行测试并生成 gas 报告
 npm run test:gas
 
-# Generate coverage report
+# 生成测试覆盖率报告
 npm run coverage
 ```
 
-### 5. Deploy to Sepolia
+### 5. 部署到 Sepolia 测试网
 
 ```bash
 npm run deploy:sepolia
 ```
 
-This will:
-- Deploy MetaNodeToken (reward token)
-- Deploy TestToken (for testing ERC20 staking)
-- Deploy StakePool as upgradeable proxy
-- Set up initial token distribution
-- Create two initial pools (ETH and TestToken)
-- Save deployment info to `deployments/` folder
+部署过程将会：
+- 部署 MetaNodeToken（奖励代币）
+- 部署 TestToken（用于测试 ERC20 质押）
+- 部署可升级的 StakePool 代理合约
+- 设置初始代币分配
+- 创建两个初始池（ETH 池和 TestToken 池）
+- 保存部署信息到 `deployments/` 文件夹
 
-### 6. Interact with Deployed Contracts
+### 6. 与已部署合约交互
 
 ```bash
-# Set contract addresses in .env first
+# 首先在 .env 中设置合约地址
 npm run interact:sepolia
 ```
 
-## 📊 Contract Architecture
+## 📊 合约架构
 
-### Core Contracts
+### 核心合约
 
-1. **StakePool.sol**: Main staking contract with all core functionality
-2. **MetaNodeToken.sol**: ERC20 reward token
-3. **TestToken.sol**: Sample ERC20 token for testing
-4. **StakePoolV2.sol**: Upgraded version with bonus features
+1. **StakePool.sol**: 主质押合约，包含所有核心功能
+2. **MetaNodeToken.sol**: ERC20 奖励代币合约
+3. **TestToken.sol**: 用于测试的示例 ERC20 代币
+4. **StakePoolV2.sol**: 带有奖励倍数功能的升级版本
 
-### Data Structures
+### 数据结构
 
-#### Pool
+#### Pool（质押池）
 ```solidity
 struct Pool {
-    address stTokenAddress;      // Stake token address (address(0) for ETH)
-    uint256 poolWeight;          // Pool weight for reward allocation
-    uint256 lastRewardBlock;     // Last reward calculation block
-    uint256 accMetaNodePerST;    // Accumulated MetaNode per stake token
-    uint256 stTokenAmount;       // Total staked amount in pool
-    uint256 minDepositAmount;    // Minimum deposit amount
-    uint256 unstakeLockedBlocks; // Lock period in blocks
-    bool isActive;               // Pool active status
+    address stTokenAddress;      // 质押代币地址（address(0) 表示 ETH）
+    uint256 poolWeight;          // 池权重，用于奖励分配
+    uint256 lastRewardBlock;     // 上次奖励计算区块号
+    uint256 accMetaNodePerST;    // 每个质押代币累积的 MetaNode 奖励
+    uint256 stTokenAmount;       // 池中总质押数量
+    uint256 minDepositAmount;    // 最小质押数量
+    uint256 unstakeLockedBlocks; // 解质押锁定区块数
+    bool isActive;               // 池激活状态
 }
 ```
 
-#### User
+#### User（用户信息）
 ```solidity
 struct User {
-    uint256 stAmount;           // User staked amount
-    uint256 finishedMetaNode;   // Already distributed rewards
-    uint256 pendingMetaNode;    // Pending rewards to claim
-    UnstakeRequest[] requests;  // Unstake requests with lock periods
+    uint256 stAmount;           // 用户质押数量
+    uint256 finishedMetaNode;   // 已分配的奖励
+    uint256 pendingMetaNode;    // 待领取的奖励
+    UnstakeRequest[] requests;  // 解质押请求列表（带锁定期）
 }
 ```
 
-## 🔧 Core Functions
+## 🔧 核心功能
 
-### For Users
+### 用户功能
 
-#### Staking
+#### 质押
 ```solidity
-// Stake ETH (Pool 0)
+// 质押 ETH（池 0）
 function stake(uint256 _pid, uint256 _amount) payable
 
-// Stake ERC20 tokens (approve first)
+// 质押 ERC20 代币（需要先授权）
 testToken.approve(stakePoolAddress, amount)
 stakePool.stake(_pid, _amount)
 ```
 
-#### Unstaking
+#### 解质押
 ```solidity
-function unstake(uint256 _pid, uint256 _amount)
-function withdraw(uint256 _pid)  // After lock period
+function unstake(uint256 _pid, uint256 _amount)  // 发起解质押请求
+function withdraw(uint256 _pid)  // 锁定期后提取
 ```
 
-#### Rewards
+#### 奖励
 ```solidity
-function claim(uint256 _pid)
-function pendingMetaNode(uint256 _pid, address _user) view returns (uint256)
+function claim(uint256 _pid)  // 领取奖励
+function pendingMetaNode(uint256 _pid, address _user) view returns (uint256)  // 查询待领取奖励
 ```
 
-#### Emergency
+#### 紧急提现
 ```solidity
-function emergencyWithdraw(uint256 _pid)  // Forfeit rewards
+function emergencyWithdraw(uint256 _pid)  // 放弃奖励，立即提取质押代币
 ```
 
-### For Admins
+### 管理员功能
 
-#### Pool Management
+#### 池管理
 ```solidity
-function addPool(address _stTokenAddress, uint256 _poolWeight, uint256 _minDepositAmount, uint256 _unstakeLockedBlocks)
-function updatePool(uint256 _pid, uint256 _poolWeight, uint256 _minDepositAmount, uint256 _unstakeLockedBlocks)
-function setPoolActive(uint256 _pid, bool _isActive)
+function addPool(address _stTokenAddress, uint256 _poolWeight, uint256 _minDepositAmount, uint256 _unstakeLockedBlocks)  // 添加新池
+function updatePool(uint256 _pid, uint256 _poolWeight, uint256 _minDepositAmount, uint256 _unstakeLockedBlocks)  // 更新池参数
+function setPoolActive(uint256 _pid, bool _isActive)  // 设置池激活状态
 ```
 
-#### System Control
+#### 系统控制
 ```solidity
-function setMetaNodePerBlock(uint256 _metaNodePerBlock)
-function pause() / unpause()
-function setStakePaused(bool _paused)
-function setUnstakePaused(bool _paused) 
-function setClaimPaused(bool _paused)
+function setMetaNodePerBlock(uint256 _metaNodePerBlock)  // 设置每区块奖励
+function pause() / unpause()  // 全局暂停/恢复
+function setStakePaused(bool _paused)  // 暂停/恢复质押
+function setUnstakePaused(bool _paused)  // 暂停/恢复解质押
+function setClaimPaused(bool _paused)  // 暂停/恢复领取奖励
 ```
 
 ## 🧪 Testing
